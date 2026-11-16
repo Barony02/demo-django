@@ -1,5 +1,9 @@
 # Demo Django + Tailwind
 
+- **Nome:** Gabriel Barony Menezes
+- **Curso:** Ciência da Computação — Universidade Federal de Ouro Preto (UFOP)
+- **Disciplina:** Programação Web
+
 Aplicação web de demonstração desenvolvida para a disciplina de **Programação Web**, utilizando **Django 5.1**, **Tailwind CSS** (via CDN), **SQLite** e **Docker Compose**. O sistema permite o cadastro e gerenciamento de categorias e mensagens pelo painel administrativo e sua exibição dinâmica na página inicial.
 
 ## Capturas de Tela
