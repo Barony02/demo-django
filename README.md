@@ -1,113 +1,76 @@
-# Demo Django
+# Demo Django + Tailwind
 
-Projeto de demonstração desenvolvido com Django, framework Python para criação de aplicações web seguras, organizadas e escaláveis.
+Aplicação web de demonstração desenvolvida para a disciplina de **Programação Web**, utilizando **Django 5.1.3**, **Tailwind CSS** (via CDN), **SQLite** e **Docker Compose**. O sistema permite o cadastro e gerenciamento de categorias, tags e mensagens pelo painel administrativo e sua exibição dinâmica na página inicial.
 
-## Visão geral
+## Capturas de Tela
 
-Este projeto serve como base para estudar e desenvolver uma aplicação Django. A estrutura pode ser expandida com novas aplicações, modelos, páginas, APIs, autenticação e integrações com serviços externos.
+> Substitua os caminhos abaixo pelas capturas de tela reais do seu projeto (sugestão: salve-as em uma pasta `docs/images/`).
+
+### Página Inicial (`/`)
+![Página Inicial](docs/images/home.png)
+
+### Página Sobre (`/sobre/`)
+![Página Sobre](docs/images/sobre.png)
+
+### Painel Administrativo (`/admin/`)
+![Painel Administrativo](docs/images/admin.png)
+
+## Funcionalidades e Rotas
+
+- **`/` (Página Inicial)**: Lista todas as mensagens cadastradas no banco de dados SQLite ordenadas da mais recente para a mais antiga, exibindo título, categoria, tags (`#tag`), conteúdo, autor e data/hora de criação (`America/Sao_Paulo`).
+- **`/sobre/` (Sobre)**: Página institucional com informações sobre a arquitetura e tecnologias utilizadas no projeto.
+- **`/admin/` (Painel Administrativo)**: Interface nativa do Django (em `pt-br`) configurada para gerenciamento (`CRUD`), busca e filtragem de **Categorias**, **Tags** e **Mensagens** (incluindo seletor horizontal para vinculação de múltiplas tags).
+
+## Modelo de Dados (`home`)
+
+- **`Categoria`**:
+  - `nome`: Texto único (até 50 caracteres), ordenado alfabeticamente.
+- **`Tag`**:
+  - `nome`: Slug único (até 30 caracteres), ordenado alfabeticamente.
+- **`Mensagem`**:
+  - `titulo`: Texto (até 120 caracteres).
+  - `conteudo`: Texto longo.
+  - `autor`: Texto (até 80 caracteres, padrão `"Anônimo"`).
+  - `categoria`: Chave estrangeira opcional (`SET_NULL`) relacionada a `Categoria`.
+  - `tags`: Relacionamento muitos-para-muitos (`ManyToManyField`, opcional) relacionado a `Tag`.
+  - `criada_em`: Data e hora preenchidas automaticamente na criação.
 
 ## Pré-requisitos
 
-- Python 3.10 ou superior;
-- `pip`;
-- Git (opcional, para versionamento);
-- Um banco de dados compatível com a configuração do projeto.
+- **Opção 1 (Recomendada):** Docker e Docker Compose;
 
-## Instalação
+## Como Executar
 
-No Windows, execute no terminal:
+### Opção 1: Com Docker Compose
 
-```powershell
-git clone <url-do-repositorio>
-cd demo-django
-python -m venv .venv
-.\.venv\Scripts\Activate.ps1
-python -m pip install --upgrade pip
-pip install -r requirements.txt
+1. Clone o repositório e acesse a pasta do projeto:
+   ```bash
+   git clone <url-do-repositorio>
+   cd demo-django
+   ```
+
+2. Suba o container da aplicação:
+   ```bash
+   docker compose up --build
+   ```
+
+3. Em outro terminal, aplique as migrações e crie um superusuário para acessar o `/admin`:
+   ```bash
+   docker compose exec web python manage.py migrate
+   docker compose exec web python manage.py createsuperuser
+   ```
+   *(Substitua `web` pelo nome do serviço definido no seu `docker-compose.yml`, caso seja diferente).*
+
+
+Após iniciar, acesse:
+- **Aplicação:** `(http://127.0.0.1:8000/)`
+- **Admin:** `(http://127.0.0.1:8000/admin/)`
+
+## Comandos Úteis
+
+```bash
+python manage.py check           # Verifica problemas de configuração no projeto
+python manage.py makemigrations  # Cria novas migrações após alterações em models.py
+python manage.py migrate         # Aplica as migrações no banco de dados
+python manage.py test            # Executa a suíte de testes automatizados
 ```
-
-Caso o arquivo `requirements.txt` ainda não exista, instale o Django diretamente:
-
-```powershell
-pip install django
-```
-
-## Configuração
-
-1. Crie um arquivo `.env` para variáveis de ambiente, se o projeto utilizar esse recurso.
-2. Configure a chave secreta, o modo de depuração, os hosts permitidos e o banco de dados.
-3. Nunca publique credenciais ou chaves secretas no repositório.
-
-Exemplo de configurações comuns:
-
-```env
-DEBUG=True
-SECRET_KEY=chave-de-desenvolvimento
-ALLOWED_HOSTS=localhost,127.0.0.1
-```
-
-## Banco de dados
-
-Aplique as migrações antes de iniciar a aplicação:
-
-```powershell
-python manage.py makemigrations
-python manage.py migrate
-```
-
-Para criar um usuário administrador:
-
-```powershell
-python manage.py createsuperuser
-```
-
-## Executando o projeto
-
-Inicie o servidor de desenvolvimento com:
-
-```powershell
-python manage.py runserver
-```
-
-Acesse `http://127.0.0.1:8000/`. O painel administrativo, quando habilitado, fica disponível em `http://127.0.0.1:8000/admin/`.
-
-## Comandos úteis
-
-```powershell
-python manage.py check
-python manage.py test
-python manage.py collectstatic
-python manage.py shell
-```
-
-- `check`: identifica problemas comuns na configuração.
-- `test`: executa os testes automatizados.
-- `collectstatic`: reúne arquivos estáticos para publicação.
-- `shell`: abre um terminal interativo com o ambiente Django carregado.
-
-## Estrutura esperada
-
-```text
-demo-django/
-├── manage.py              # Utilitário de linha de comando do Django
-├── <projeto>/              # Configurações, URLs e WSGI/ASGI
-├── <aplicacao>/            # Regras de negócio da aplicação
-├── templates/              # Templates HTML
-├── static/                 # CSS, JavaScript e imagens
-├── tests/                  # Testes automatizados
-├── requirements.txt        # Dependências Python
-└── .env                    # Configurações locais (não versionar)
-```
-
-## Boas práticas
-
-- Mantenha configurações sensíveis em variáveis de ambiente.
-- Separe responsabilidades em aplicações Django pequenas e coesas.
-- Escreva testes para modelos, views, formulários e endpoints.
-- Use migrações para versionar alterações no banco de dados.
-- Desative `DEBUG` e configure `ALLOWED_HOSTS` antes da publicação.
-- Use HTTPS, proteção CSRF e autenticação adequada em produção.
-
-## Licença
-
-Defina aqui a licença do projeto quando ela for escolhida.
