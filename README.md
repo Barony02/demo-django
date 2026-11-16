@@ -63,27 +63,6 @@ Após iniciar, acesse:
 - **Aplicação:** `(http://127.0.0.1:8000/)`
 - **Admin:** `(http://127.0.0.1:8000/admin/)`
 
-## Estrutura do Projeto
-
-```text
-demo-django/
-├── core/                   # Configurações principais do projeto (settings, urls, wsgi/asgi)
-├── home/                   # Aplicação principal
-│   ├── admin.py            # Registro e filtros de Categoria e Mensagem no Django Admin
-│   ├── models.py           # Modelos Categoria e Mensagem
-│   ├── urls.py             # Rotas da aplicação ('' e 'sobre/')
-│   ├── views.py            # Views index e sobre
-│   └── templates/
-│       └── home/
-│           ├── index.html  # Página inicial com listagem de mensagens
-│           └── sobre.html  # Página sobre o projeto
-├── docs/
-│   └── images/             # Imagens utilizadas no README
-├── db.sqlite3              # Banco de dados SQLite local
-├── manage.py               # Utilitário de linha de comando do Django
-└── requirements.txt        # Dependências Python
-```
-
 ## Comandos Úteis
 
 ```bash
@@ -91,5 +70,4 @@ python manage.py check           # Verifica problemas de configuração no proje
 python manage.py makemigrations  # Cria novas migrações após alterações em models.py
 python manage.py migrate         # Aplica as migrações no banco de dados
 python manage.py test            # Executa a suíte de testes automatizados
-```
 ```
